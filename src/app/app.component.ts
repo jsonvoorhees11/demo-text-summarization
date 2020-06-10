@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import Section from './models/section.model';
+import { ModalService } from './modal/modal.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'text-summarization';
+export class AppComponent implements OnInit {
+  constructor(){}
+  ngOnInit(){}
 }

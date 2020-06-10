@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="wrapper">
+        <section class="section-content">
+            <textarea [(ngModel)]="selectedSection!.content">
+            </textarea>
+            <div class="section-button">
+                <button (click)="openModal('preview-modal')">Preview</button>
+                <button (click)="summarize()">Run</button>
+            </div>
+        </section>
+        <section class="main">
+            <div class="sections">
+                <div *ngFor="let section of sections" class="section-item" (click)="selectSection(section.name)">
+                    <input class="section-input" [(ngModel)]="section.name">
+                    <fa-icon class="remove-button" [icon]="removeIcon" [style]="{'font-size': '30px','color':'#eff0f3'}"
+                        (click)="removeSection(section.id)">
+                    </fa-icon>
+                </div>
+            </div>
+            <button id="add-button" (click)="addSection()">Add section</button>
+            <button id="random-button" (click)="randomSections()">Random</button>
+        </section>
+    </div>
+
+    <div *ngIf="summarizedContent && summarizedContent.length > 0" class="summary">
+        <p>{{summarizedContent}}</p>
+    </div>
+
+    <app-modal id="preview-modal">
+        <div class="modal-header">
+            <h1>Document preview</h1>
+            <div class="close-button" (click)="closeModal('preview-modal');">
+                <fa-icon [icon]="closeIcon" [style]="{'font-size': '20px'}"></fa-icon>
+            </div>
+        </div>
+        <div class="preview-content">
+            <p *ngFor="let section of sections">
+                <span>{{section.name}}</span>
+                {{section.content}}
+            </p>
+        </div>
+        <div id="run-button" (click)="summarize('preview-modal')">Run</div>
+    </app-modal>
+</div>
