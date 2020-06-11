@@ -7,8 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import Summary from '../models/summary.model';
 import { SummaryRequest } from '../models/summary-request.model';
 import { catchError, map, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 import { SummarizationService } from '../summarization.service';
+import { indicate } from '../operators';
 
 @Component({
   selector: 'app-main',
@@ -19,6 +20,8 @@ export class MainComponent implements OnInit {
 
   removeIcon = faTimesCircle;
   closeIcon = faWindowClose;
+
+  loading$ = new Subject<boolean>()
 
   sections: Section[];
   selectedSection: Section;
@@ -70,14 +73,17 @@ export class MainComponent implements OnInit {
 
     this.sumService
       .random(this.baseUrl)
+      .pipe(indicate(this.loading$))
       .subscribe(randSections => {
         this.sections = [];
         const length = randSections.section_names.length > randSections.sections.length
-                      ? randSections.sections.length : randSections.section_names.length;
-        for (let i = 0; i < length ; i++) {
+          ? randSections.sections.length : randSections.section_names.length;
+        for (let i = 0; i < length; i++) {
           this.sections.push(new Section(randSections.section_names[i], randSections.sections[i]));
         }
-        this.selectedSection = this.sections[0];
+        if (this.sections && this.sections.length > 0) {
+          this.selectedSection = this.sections[0];
+        }
       });
   }
 
@@ -85,8 +91,9 @@ export class MainComponent implements OnInit {
     if (this.baseUrl.length > 0) {
       const request = new SummaryRequest(this.sections.map(x => x.name), this.sections.map(x => x.content));
       this.sumService
-          .summary(this.baseUrl, request)
-          .subscribe(summary => this.summarizedContent = summary.summary);
+        .summary(this.baseUrl, request)
+        .pipe(indicate(this.loading$))
+        .subscribe(summary => this.summarizedContent = summary.summary);
     }
     if (modalId !== '') {
       this.closeModal(modalId);

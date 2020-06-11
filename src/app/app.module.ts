@@ -8,11 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ApiSelectorComponent } from './api-selector/api-selector.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadIndicatorComponent } from './load-indicator/load-indicator.component';
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    ApiSelectorComponent
+    ApiSelectorComponent,
+    LoadIndicatorComponent
   ],
   imports: [
     BrowserModule,
