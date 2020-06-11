@@ -13,7 +13,7 @@
                 <div *ngFor="let section of sections" class="section-item" (click)="selectSection(section.name)">
                     <input class="section-input" [(ngModel)]="section.name">
                     <fa-icon class="remove-button" [icon]="removeIcon" [style]="{'font-size': '30px','color':'#eff0f3'}"
-                        (click)="removeSection(section.id)">
+                        (click)="removeSection(section.name)">
                     </fa-icon>
                 </div>
             </div>
